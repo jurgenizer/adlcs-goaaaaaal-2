@@ -50,6 +50,7 @@
     const playerBlueHeight = 66;
     const playerBlueWidth = 50;
     let playerBlueX = (canvas.width - playerBlueWidth) / 2;
+    let playerBlueY = (canvas.height - playerBlueHeight * 2);
     let rightPressed = false;
     let leftPressed = false;
 
@@ -87,7 +88,7 @@
       let playerBlue = new Image();
       playerBlue.src = "images/player-blue.png";
 
-      ctx.drawImage(playerBlue, playerBlueX, canvas.height - playerBlueHeight- 30);
+      ctx.drawImage(playerBlue, playerBlueX, playerBlueY);
     }
 
     function draw() {
@@ -105,15 +106,15 @@
       }
 
       if(rightPressed) {
-        playerBlue += 7;
-        if (playerBlue + playerBlueWidth > canvas.width){
-            playerBlue = canvas.width - playerBlueWidth;
+        playerBlueX += 7;
+        if (playerBlueX + playerBlueWidth > canvas.width){
+            playerBlueX = canvas.width - playerBlueWidth - fieldOffset;
         }
     }
     else if(leftPressed) {
-        playerBlue -= 7;
-        if (playerBlue < 0){
-            playerBlue = 0;
+        playerBlueX -= 7;
+        if (playerBlueX < 0){
+            playerBlueX = 0 + fieldOffset;
         }
     }
 
