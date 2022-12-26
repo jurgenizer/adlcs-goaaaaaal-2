@@ -41,38 +41,91 @@
     let dx = 2;
     let dy = -2;
 
-    const ballRadius = 10;
+    const ballHeight = 24;
+    const ballWidth = 24;
 
+    //Offset necessary because of the way field.png was originally created
+    const fieldOffset = 6;
+
+    const playerBlueHeight = 66;
+    const playerBlueWidth = 50;
+    let playerBlueX = (canvas.width - playerBlueWidth) / 2;
+    let rightPressed = false;
+    let leftPressed = false;
+
+
+    drawBall();
+    drawPlayerBlue();
+
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+
+    function keyDownHandler(e) {
+      if (e.key === "Right" || e.key === "ArrowRight") {
+        rightPressed = true;
+      } else if (e.key === "Left" || e.key === "ArrowLeft") {
+        leftPressed = true;
+      }
+    }
+
+    function keyUpHandler(e) {
+      if (e.key === "Right" || e.key === "ArrowRight") {
+        rightPressed = false;
+      } else if (e.key === "Left" || e.key === "ArrowLeft") {
+        leftPressed = false;
+      }
+    }
 
 
     function drawBall() {
-      ctx.beginPath();
-      ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+      let ball = new Image();
+      ball.src = "images/ball.png";
+      ctx.drawImage(ball, x, y);
+    }
 
-      ctx.fillStyle = "#FFFFFF";
-      ctx.fill();
-      ctx.closePath();
+    function drawPlayerBlue() {
+      let playerBlue = new Image();
+      playerBlue.src = "images/player-blue.png";
+
+      ctx.drawImage(playerBlue, playerBlueX, canvas.height - playerBlueHeight- 30);
     }
 
     function draw() {
-      // 'Cleans'
+      // 'Cleans' canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       drawBall();
+      drawPlayerBlue();
 
-      if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+      if (x + dx > canvas.width - ballWidth - fieldOffset || x < fieldOffset) {
         dx = -dx;
       }
-      if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
+      if (y + dy > canvas.height - ballHeight - fieldOffset || y < fieldOffset) {
         dy = -dy;
       }
+
+      if(rightPressed) {
+        playerBlue += 7;
+        if (playerBlue + playerBlueWidth > canvas.width){
+            playerBlue = canvas.width - playerBlueWidth;
+        }
+    }
+    else if(leftPressed) {
+        playerBlue -= 7;
+        if (playerBlue < 0){
+            playerBlue = 0;
+        }
+    }
 
       x += dx;
       y += dy;
 
     }
 
-    setInterval(draw, 10);
+
+
+
+ 
 
     /*
     
@@ -92,6 +145,9 @@
     */
 
 
+
+    // Redraw screen every 10ms
+    setInterval(draw, 10);
 
   </script>
 </body>
