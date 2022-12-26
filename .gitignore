@@ -1,0 +1,2 @@
+# Avoid committing macOS files
+.DS_Store
