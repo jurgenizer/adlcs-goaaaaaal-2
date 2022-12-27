@@ -60,7 +60,7 @@
     const brickHeight = 30;
     const brickPadding = 20;
     const brickOffsetTop = 80;
-    const brickOffsetLeft = 10;
+    const brickOffsetLeft = 5;
 
     // Variable for score
     let score = 0;
@@ -182,11 +182,9 @@
             const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
             bricks[c][r].x = brickX;
             bricks[c][r].y = brickY;
-            ctx.beginPath();
-            ctx.rect(brickX, brickY, brickWidth, brickHeight);
-            ctx.fillStyle = "#0095DD";
-            ctx.fill();
-            ctx.closePath();
+            let cone = new Image();
+            cone.src = "images/icons8-cone-40.png";
+            ctx.drawImage(cone, brickX, brickY);
           }
         }
       }
@@ -256,4 +254,5 @@
 
   </script>
 </body>
+
 </html>
