@@ -145,7 +145,8 @@
       let playerBlue = new Image();
       playerBlue.src = "images/player-blue.png";
 
-      ctx.drawImage(playerBlue, playerBlueX, playerBlueY);
+      //ctx.drawImage(playerBlue, playerBlueX, playerBlueY);
+      ctx.drawImage(playerBlue, playerBlueX, canvas.height - playerBlueHeight,)
     }
 
 
@@ -175,17 +176,16 @@
       drawBricks();
       drawBall();
       drawPlayerBlue();
-      collisionDetection();
       drawScore();
+      collisionDetection();
 
 
-      if (x + dx > canvas.width - ballWidth - fieldOffset || x < fieldOffset) {
+      if (x + dx > canvas.width - ballWidth / 2 - fieldOffset || x < fieldOffset) {
         dx = -dx;
       }
-      if (y + dy < ballHeight + fieldOffset) {
+      if (y + dy < ballHeight / 2 + fieldOffset) {
         dy = -dy;
-      }
-      else if (y + dy > playerBlueY - ballHeight) {
+      } else if (y + dy > canvas.height - (ballHeight / 2)-playerBlueHeight) {
         if (x > playerBlueX && x < playerBlueX + playerBlueWidth) {
           dy = -dy;
         }
