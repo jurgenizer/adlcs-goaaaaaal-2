@@ -56,30 +56,27 @@
     // Offset necessary because of the way field.png was originally created (green borders)
     const fieldOffset = 6;
 
-    // Bricks
-    const brickRowCount = 2;
-    const brickColumnCount = 6;
-    const brickWidth = 30;
-    const brickHeight = 30;
-    const brickPadding = 20;
-    const brickOffsetTop = 80;
-    const brickOffsetLeft = 5;
+    // Cones
+    const coneRowCount = 2;
+    const coneColumnCount = 6;
+    const coneWidth = 30;
+    const coneHeight = 30;
+    const conePadding = 20;
+    const coneOffsetTop = 160;
+    const coneOffsetLeft = 10;
 
-    // Variable for score
+    // Variables for score and lives
     let score = 0;
     let lives = 3;
 
-    // Two-dimensional array for the bricks
-    const bricks = [];
-    for (let c = 0; c < brickColumnCount; c++) {
-      bricks[c] = [];
-      for (let r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = { x: 0, y: 0, status: 1 };
+    // Two-dimensional array for the cones
+    const cones = [];
+    for (let c = 0; c < coneColumnCount; c++) {
+      cones[c] = [];
+      for (let r = 0; r < coneRowCount; r++) {
+        cones[c][r] = { x: 0, y: 0, status: 1 };
       }
     }
-
-    //drawBall();
-    //drawPlayerBlue();
 
     // Keyboard events
     document.addEventListener("keydown", keyDownHandler, false);
@@ -123,20 +120,20 @@
     }
 
     function collisionDetection() {
-      for (let c = 0; c < brickColumnCount; c++) {
-        for (let r = 0; r < brickRowCount; r++) {
-          const b = bricks[c][r];
+      for (let c = 0; c < coneColumnCount; c++) {
+        for (let r = 0; r < coneRowCount; r++) {
+          const b = cones[c][r];
           if (b.status === 1) {
             if (
               x > b.x &&
-              x < b.x + brickWidth &&
+              x < b.x + coneWidth &&
               y > b.y &&
-              y < b.y + brickHeight
+              y < b.y + coneHeight
             ) {
               dy = -dy;
               b.status = 0;
               score++;
-              if (score === brickRowCount * brickColumnCount) {
+              if (score === coneRowCount * coneColumnCount) {
                 alert("YOU WIN, CONGRATULATIONS!");
                 document.location.reload();
               }
@@ -178,18 +175,17 @@
       ctx.drawImage(playerBlue, playerBlueX, canvas.height - playerBlueHeight - fieldOffset)
     }
 
-
-    function drawBricks() {
-      for (let c = 0; c < brickColumnCount; c++) {
-        for (let r = 0; r < brickRowCount; r++) {
-          if (bricks[c][r].status === 1) {
-            const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
-            const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
-            bricks[c][r].x = brickX;
-            bricks[c][r].y = brickY;
+    function drawCones() {
+      for (let c = 0; c < coneColumnCount; c++) {
+        for (let r = 0; r < coneRowCount; r++) {
+          if (cones[c][r].status === 1) {
+            const coneX = c * (coneWidth + conePadding) + coneOffsetLeft;
+            const coneY = r * (coneHeight + conePadding) + coneOffsetTop;
+            cones[c][r].x = coneX;
+            cones[c][r].y = coneY;
             let cone = new Image();
             cone.src = "images/icons8-cone-30.png";
-            ctx.drawImage(cone, brickX, brickY);
+            ctx.drawImage(cone, coneX, coneY);
           }
         }
       }
@@ -200,7 +196,7 @@
     function draw() {
       // 'Cleans' canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawBricks();
+      drawCones();
       drawBall();
       drawGoal();
       drawPlayerBlue();
