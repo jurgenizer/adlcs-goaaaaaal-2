@@ -44,8 +44,8 @@
 
     let x = canvas.width / 2;
     let y = playerBlueY - playerBlueHeight;
-    let dx = 3;
-    let dy = -3;
+    let dx = 4;
+    let dy = -4;
 
     const ballHeight = 24;
     const ballWidth = 24;
@@ -141,7 +141,7 @@
               coneItems.status = 0;
               score++;
               if (score === coneRowCount * coneColumnCount) {
-                alert("YOU WIN, CONGRATULATIONS!");
+                alert("CONES CLEARED!");
                 document.location.reload();
               }
             }
@@ -153,12 +153,9 @@
 
     function collisionDetectionGoal() {
       if (
-        x > goal.x &&
-        x < goal.x + goalWidth &&
-        y > goal.y &&
-        y < goal.y + goalHeight
+       x > goalX && y < goal.y + goalHeight && x < goalX + goalWidth - ballWidth
       ) {
-        dy = -dy * 0.2;
+        dy = -dy * 0;
         score++;
         alert("GOAAAAAAL!");
         document.location.reload();
@@ -167,15 +164,21 @@
 
 
     function drawScore() {
-      ctx.font = "16px Arial";
+      ctx.font = "15px Arial";
       ctx.fillStyle = "#FFFFFF";
       ctx.fillText(`Score: ${score}`, 8, 22);
     }
 
     function drawLives() {
-      ctx.font = "16px Arial";
+      ctx.font = "15px Arial";
       ctx.fillStyle = "#FFFFFF";
       ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 22);
+    }
+
+    function drawGoal() {
+      goal.src = "images/goal.png";
+      ctx.drawImage(goal, goalX, 10);
+      console.log("goalX is " +  goalX)
     }
 
     function drawBall() {
@@ -183,10 +186,7 @@
       ctx.drawImage(ball, x, y);
     }
 
-    function drawGoal() {
-      goal.src = "images/goal.png";
-      ctx.drawImage(goal, goalX, 10);
-    }
+
 
     function drawPlayerBlue() {
       playerBlue.src = "images/player-blue.png";
@@ -208,13 +208,14 @@
         }
       }
     }
+    
 
     function draw() {
       // 'Cleans' canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawCones();
-      drawBall();
       drawGoal();
+      drawBall();
       drawPlayerBlue();
       drawScore();
       drawLives();
@@ -226,7 +227,7 @@
       }
       if (y + dy < ballHeight / 2 + fieldOffset) {
         dy = -dy;
-      } else if (y + dy > canvas.height - playerBlueHeight) {
+      } else if (y + dy > canvas.height - playerBlueHeight - ballHeight) {
         if (x > playerBlueX && x < playerBlueX + playerBlueWidth) {
           dy = -dy;
         }
