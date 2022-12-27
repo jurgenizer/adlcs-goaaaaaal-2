@@ -51,7 +51,8 @@
     const ballWidth = 24;
 
     const goalWidth = 80;
-    const goalX = canvas.width / 2 - goalWidth/2;
+    const goalHeight = 40;
+    const goalX = canvas.width / 2 - goalWidth / 2;
 
     // Offset necessary because of the way field.png was originally created (green borders)
     const fieldOffset = 6;
@@ -68,6 +69,12 @@
     // Variables for score and lives
     let score = 0;
     let lives = 3;
+
+
+    // Variables for ball, goal, playerBlue
+    let ball = new Image();
+    let goal = new Image();
+    let playerBlue = new Image();
 
     // Two-dimensional array for the cones
     const cones = [];
@@ -119,19 +126,19 @@
       }
     }
 
-    function collisionDetection() {
+    function collisionDetectionCones() {
       for (let c = 0; c < coneColumnCount; c++) {
         for (let r = 0; r < coneRowCount; r++) {
-          const b = cones[c][r];
-          if (b.status === 1) {
+          const coneItems = cones[c][r];
+          if (coneItems.status === 1) {
             if (
-              x > b.x &&
-              x < b.x + coneWidth &&
-              y > b.y &&
-              y < b.y + coneHeight
+              x > coneItems.x &&
+              x < coneItems.x + coneWidth &&
+              y > coneItems.y &&
+              y < coneItems.y + coneHeight
             ) {
               dy = -dy;
-              b.status = 0;
+              coneItems.status = 0;
               score++;
               if (score === coneRowCount * coneColumnCount) {
                 alert("YOU WIN, CONGRATULATIONS!");
@@ -142,6 +149,22 @@
         }
       }
     }
+
+
+    function collisionDetectionGoal() {
+      if (
+        x > goal.x &&
+        x < goal.x + goalWidth &&
+        y > goal.y &&
+        y < goal.y + goalHeight
+      ) {
+        dy = -dy * 0.2;
+        score++;
+        alert("GOAAAAAAL!");
+        document.location.reload();
+      }
+    }
+
 
     function drawScore() {
       ctx.font = "16px Arial";
@@ -156,22 +179,17 @@
     }
 
     function drawBall() {
-      let ball = new Image();
       ball.src = "images/ball.png";
       ctx.drawImage(ball, x, y);
     }
 
     function drawGoal() {
-      let goal = new Image();
       goal.src = "images/goal.png";
       ctx.drawImage(goal, goalX, 10);
     }
 
     function drawPlayerBlue() {
-      let playerBlue = new Image();
       playerBlue.src = "images/player-blue.png";
-
-      //ctx.drawImage(playerBlue, playerBlueX, playerBlueY);
       ctx.drawImage(playerBlue, playerBlueX, canvas.height - playerBlueHeight - fieldOffset)
     }
 
@@ -191,8 +209,6 @@
       }
     }
 
-
-
     function draw() {
       // 'Cleans' canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -202,18 +218,19 @@
       drawPlayerBlue();
       drawScore();
       drawLives();
-      collisionDetection();
+      collisionDetectionCones();
+      collisionDetectionGoal();
 
       if (x + dx > canvas.width - ballWidth - fieldOffset || x < fieldOffset) {
         dx = -dx;
       }
       if (y + dy < ballHeight / 2 + fieldOffset) {
         dy = -dy;
-      } else if (y + dy > canvas.height - (ballHeight / 2) - playerBlueHeight) {
+      } else if (y + dy > canvas.height - playerBlueHeight) {
         if (x > playerBlueX && x < playerBlueX + playerBlueWidth) {
           dy = -dy;
         }
-        else {
+        else if (y + dy > canvas.height - ballHeight) {
           lives--;
           if (!lives) {
             alert("GAME OVER");
