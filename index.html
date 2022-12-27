@@ -65,6 +65,8 @@
 
     // Variable for score
     let score = 0;
+    let lives = 3;
+
 
 
     // Two-dimensional array for the bricks
@@ -75,9 +77,6 @@
         bricks[c][r] = { x: 0, y: 0, status: 1 };
       }
     }
-
-
-
 
 
     drawBall();
@@ -102,6 +101,16 @@
       }
     }
 
+    document.addEventListener("mousemove", mouseMoveHandler, false);
+
+    function mouseMoveHandler(e) {
+      const relativeX = e.clientX - canvas.offsetLeft;
+      if (relativeX > 0 && relativeX < canvas.width) {
+        playerBlueX = relativeX - playerBlueWidth / 2;
+      }
+    }
+
+
     function collisionDetection() {
       for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
@@ -119,7 +128,6 @@
               if (score === brickRowCount * brickColumnCount) {
                 alert("YOU WIN, CONGRATULATIONS!");
                 document.location.reload();
-                clearInterval(interval); // Needed for Chrome to end game
               }
             }
           }
@@ -133,6 +141,11 @@
       ctx.fillText(`Score: ${score}`, 8, 20);
     }
 
+    function drawLives() {
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
+    }
 
 
     function drawBall() {
@@ -177,6 +190,8 @@
       drawBall();
       drawPlayerBlue();
       drawScore();
+      drawLives();
+
       collisionDetection();
 
 
@@ -185,14 +200,23 @@
       }
       if (y + dy < ballHeight / 2 + fieldOffset) {
         dy = -dy;
-      } else if (y + dy > canvas.height - (ballHeight / 2)-playerBlueHeight) {
+      } else if (y + dy > canvas.height - (ballHeight / 2) - playerBlueHeight) {
         if (x > playerBlueX && x < playerBlueX + playerBlueWidth) {
           dy = -dy;
         }
         else {
-          alert("GAME OVER");
-          document.location.reload();
-          clearInterval(interval); // Needed for Chrome to end game
+          lives--;
+          if (!lives) {
+            alert("GAME OVER");
+            document.location.reload();
+          }
+          else {
+            x = canvas.width / 2;
+            y = canvas.height - 80;
+            dx = 3;
+            dy = -3;
+            playerBlueX = (canvas.width - playerBlueWidth) / 2;
+          }
         }
       }
 
@@ -212,6 +236,8 @@
       x += dx;
       y += dy;
 
+      requestAnimationFrame(draw);
+
     }
 
 
@@ -219,8 +245,11 @@
 
 
 
-    // Redraw screen every 10ms
-    let interval = setInterval(draw, 10);
+    // Old: redraw screen every 10ms
+    // let interval = setInterval(draw, 10);
+
+    draw();
+
   </script>
 </body>
 
