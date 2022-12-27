@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A simple JavaScript game made with vanilla JavaScript, more or less.">
+  <meta name="description" content="A simple JavaScript game made with vanilla JavaScript.">
   <title>Goaaaaaal 2</title>
   <style>
     * {
@@ -34,7 +34,6 @@
   <script>
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
-
 
     const playerBlueHeight = 66;
     const playerBlueWidth = 50;
@@ -67,8 +66,6 @@
     let score = 0;
     let lives = 3;
 
-
-
     // Two-dimensional array for the bricks
     const bricks = [];
     for (let c = 0; c < brickColumnCount; c++) {
@@ -82,6 +79,7 @@
     drawBall();
     drawPlayerBlue();
 
+    // Keyboard events
     document.addEventListener("keydown", keyDownHandler, false);
     document.addEventListener("keyup", keyUpHandler, false);
 
@@ -101,12 +99,25 @@
       }
     }
 
+    //Mouse events
     document.addEventListener("mousemove", mouseMoveHandler, false);
 
     function mouseMoveHandler(e) {
       const relativeX = e.clientX - canvas.offsetLeft;
       if (relativeX > 0 && relativeX < canvas.width) {
         playerBlueX = relativeX - playerBlueWidth / 2;
+      }
+    }
+
+
+    // Mobile touch events
+    document.addEventListener("touchstart", touchHandler);
+    document.addEventListener("touchmove", touchHandler);
+    function touchHandler(e) {
+      if (e.touches) {
+        playerBlueX = e.touches[0].pageX - canvas.offsetLeft - playerBlueWidth / 2;
+        playerBlueY = e.touches[0].pageY - canvas.offsetTop - playerBlueHeight / 2;
+        e.preventDefault();
       }
     }
 
@@ -241,16 +252,8 @@
     }
 
 
-
-
-
-
-    // Old: redraw screen every 10ms
-    // let interval = setInterval(draw, 10);
-
     draw();
 
   </script>
 </body>
-
 </html>
