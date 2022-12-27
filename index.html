@@ -104,9 +104,14 @@
 
     function mouseMoveHandler(e) {
       const relativeX = e.clientX - canvas.offsetLeft;
+      if (relativeX > playerBlueWidth / 2 && relativeX < canvas.width - playerBlueWidth / 2) {
+        playerBlueX = relativeX - playerBlueWidth / 2;
+      }
+      /*
       if (relativeX > 0 && relativeX < canvas.width) {
         playerBlueX = relativeX - playerBlueWidth / 2;
       }
+      */
     }
 
 
@@ -158,7 +163,6 @@
       ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
     }
 
-
     function drawBall() {
       let ball = new Image();
       ball.src = "images/ball.png";
@@ -170,7 +174,7 @@
       playerBlue.src = "images/player-blue.png";
 
       //ctx.drawImage(playerBlue, playerBlueX, playerBlueY);
-      ctx.drawImage(playerBlue, playerBlueX, canvas.height - playerBlueHeight,)
+      ctx.drawImage(playerBlue, playerBlueX, canvas.height - playerBlueHeight - fieldOffset)
     }
 
 
@@ -200,11 +204,9 @@
       drawPlayerBlue();
       drawScore();
       drawLives();
-
       collisionDetection();
 
-
-      if (x + dx > canvas.width - ballWidth / 2 - fieldOffset || x < fieldOffset) {
+      if (x + dx > canvas.width - ballWidth - fieldOffset || x < fieldOffset) {
         dx = -dx;
       }
       if (y + dy < ballHeight / 2 + fieldOffset) {
@@ -221,9 +223,9 @@
           }
           else {
             x = canvas.width / 2;
-            y = canvas.height - 80;
-            dx = 3;
-            dy = -3;
+            y = canvas.height - fieldOffset - 80; //this 'magic number' to be fixed in future version
+            dx = 4;
+            dy = -4;
             playerBlueX = (canvas.width - playerBlueWidth) / 2;
           }
         }
