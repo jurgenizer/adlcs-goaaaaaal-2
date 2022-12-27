@@ -44,13 +44,16 @@
 
     let x = canvas.width / 2;
     let y = playerBlueY - playerBlueHeight;
-    let dx = 2;
-    let dy = -2;
+    let dx = 3;
+    let dy = -3;
 
     const ballHeight = 24;
     const ballWidth = 24;
 
-    // Offset necessary because of the way field.png was originally created
+    const goalWidth = 80;
+    const goalX = canvas.width / 2 - goalWidth/2;
+
+    // Offset necessary because of the way field.png was originally created (green borders)
     const fieldOffset = 6;
 
     // Bricks
@@ -75,9 +78,8 @@
       }
     }
 
-
-    drawBall();
-    drawPlayerBlue();
+    //drawBall();
+    //drawPlayerBlue();
 
     // Keyboard events
     document.addEventListener("keydown", keyDownHandler, false);
@@ -107,13 +109,7 @@
       if (relativeX > playerBlueWidth / 2 && relativeX < canvas.width - playerBlueWidth / 2) {
         playerBlueX = relativeX - playerBlueWidth / 2;
       }
-      /*
-      if (relativeX > 0 && relativeX < canvas.width) {
-        playerBlueX = relativeX - playerBlueWidth / 2;
-      }
-      */
     }
-
 
     // Mobile touch events
     document.addEventListener("touchstart", touchHandler);
@@ -125,7 +121,6 @@
         e.preventDefault();
       }
     }
-
 
     function collisionDetection() {
       for (let c = 0; c < brickColumnCount; c++) {
@@ -154,19 +149,25 @@
     function drawScore() {
       ctx.font = "16px Arial";
       ctx.fillStyle = "#FFFFFF";
-      ctx.fillText(`Score: ${score}`, 8, 20);
+      ctx.fillText(`Score: ${score}`, 8, 22);
     }
 
     function drawLives() {
       ctx.font = "16px Arial";
       ctx.fillStyle = "#FFFFFF";
-      ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
+      ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 22);
     }
 
     function drawBall() {
       let ball = new Image();
       ball.src = "images/ball.png";
       ctx.drawImage(ball, x, y);
+    }
+
+    function drawGoal() {
+      let goal = new Image();
+      goal.src = "images/goal.png";
+      ctx.drawImage(goal, goalX, 10);
     }
 
     function drawPlayerBlue() {
@@ -187,7 +188,7 @@
             bricks[c][r].x = brickX;
             bricks[c][r].y = brickY;
             let cone = new Image();
-            cone.src = "images/icons8-cone-40.png";
+            cone.src = "images/icons8-cone-30.png";
             ctx.drawImage(cone, brickX, brickY);
           }
         }
@@ -201,6 +202,7 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawBricks();
       drawBall();
+      drawGoal();
       drawPlayerBlue();
       drawScore();
       drawLives();
