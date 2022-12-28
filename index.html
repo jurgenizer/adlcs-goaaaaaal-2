@@ -49,10 +49,10 @@
 
 <body>
 
-    <div class="container">
-      <button id="play-button">Play</button>
-    </div>
-    <canvas id="myCanvas" width="300" height="600"></canvas>
+  <div class="container">
+    <button id="play-button">Play</button>
+  </div>
+  <canvas id="myCanvas" width="300" height="600"></canvas>
 
   <script>
     const playButton = document.querySelector('#play-button');
@@ -94,6 +94,11 @@
     let score = 0;
     let lives = 3;
 
+    // Sounds
+    let soundCone = "sounds/blip.wav";
+    let soundPlayer = "sounds/player.wav";
+    let soundGameOver = "sounds/gameover.wav";
+    let soundGoal = "sounds/goal.wav";
 
     // Variables for ball, goal, playerBlue
     let ball = new Image();
@@ -107,6 +112,12 @@
       for (let r = 0; r < coneRowCount; r++) {
         cones[c][r] = { x: 0, y: 0, status: 1 };
       }
+    }
+
+    // Audio
+    function playAudio(audio) {
+      const soundEffect = new Audio(audio);
+      soundEffect.play();
     }
 
     // Keyboard events
@@ -167,6 +178,7 @@
             ) {
               dy = -dy;
               coneItems.status = 0;
+              playAudio(soundCone);
               score++;
             }
           }
@@ -180,6 +192,7 @@
       ) {
         dy = 0;
         dx = 0;
+        playAudio(soundGoal);
         score++;
         alert("GOAAAAAAL!");
         document.location.reload();
@@ -241,8 +254,6 @@
       playButton.style.visibility = 'visible'
     }
 
-
-
     function draw() {
       // 'Cleans' canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -257,6 +268,7 @@
       collisionDetectionGoal();
       hidePlayButton();
 
+
       if (x + dx > canvas.width - ballWidth - fieldOffset || x < fieldOffset) {
         dx = -dx;
       }
@@ -264,6 +276,7 @@
         dy = -dy;
       } else if (y + dy > canvas.height - playerBlueHeight - ballHeight) {
         if (x > playerBlueX  && x < playerBlueX + playerBlueWidth ) {
+          playAudio(soundPlayer);
           dy = -dy;
         }
         else if (y + dy > canvas.height - ballHeight / 4) {
