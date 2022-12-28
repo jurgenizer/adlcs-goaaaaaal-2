@@ -12,11 +12,6 @@
       margin: 0;
     }
 
-    wrappper {
-      width: 100%;
-      margin: 0 auto;
-    }
-
     canvas {
       background: #009820 url(images/field.png) no-repeat;
       display: block;
@@ -53,12 +48,12 @@
 </head>
 
 <body>
-  <div class="wrapper">
+
     <div class="container">
       <button id="play-button">Play</button>
     </div>
     <canvas id="myCanvas" width="300" height="600"></canvas>
-  </div>
+
   <script>
     const playButton = document.querySelector('#play-button');
     const canvas = document.getElementById("myCanvas");
