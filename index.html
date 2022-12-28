@@ -12,6 +12,11 @@
       margin: 0;
     }
 
+    wrappper {
+      width: 100%;
+      margin: 0 auto;
+    }
+
     canvas {
       background: #009820 url(images/field.png) no-repeat;
       display: block;
@@ -27,11 +32,11 @@
     }
 
     button {
-      border-radius: 4px;
+      border-radius: 3px;
       background-color: #009820;
       border: 2px solid #FFFFFF;
       color: #FFFFFF;
-      padding: 8px 8px;
+      padding: 6px 6px;
       text-align: center;
       text-decoration: none;
       display: inline-block;
@@ -48,16 +53,17 @@
 </head>
 
 <body>
-  <div class="container">
-    <button id="play-button">Play</button>
+  <div class="wrapper">
+    <div class="container">
+      <button id="play-button">Play</button>
+    </div>
+    <canvas id="myCanvas" width="300" height="600"></canvas>
   </div>
-
-  <canvas id="myCanvas" width="300" height="600"></canvas>
-
   <script>
     const playButton = document.querySelector('#play-button');
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
+    //const myTimeout = setTimeout(drawGameStatus, 2000);
 
     const playerBlueHeight = 66;
     const playerBlueWidth = 50;
@@ -90,10 +96,11 @@
     const coneOffsetTop = 160;
     const coneOffsetLeft = 10;
 
-    // Variables for score and lives
+    // Variables for score, lives, msg, game state
     let score = 0;
     let lives = 3;
-
+    let msg = '';
+    let paused = true;
 
     // Variables for ball, goal, playerBlue
     let ball = new Image();
@@ -108,7 +115,6 @@
         cones[c][r] = { x: 0, y: 0, status: 1 };
       }
     }
-
 
     // Keyboard events
     document.addEventListener("keydown", keyDownHandler, false);
@@ -151,6 +157,10 @@
       }
     }
 
+    function reloadThePage() {
+      document.location.reload();
+    }
+
     function collisionDetectionCones() {
       for (let c = 0; c < coneColumnCount; c++) {
         for (let r = 0; r < coneRowCount; r++) {
@@ -165,10 +175,7 @@
               dy = -dy;
               coneItems.status = 0;
               score++;
-              if (score === coneRowCount * coneColumnCount) {
-                alert("CONES CLEARED!");
-                document.location.reload();
-              }
+
             }
           }
         }
@@ -181,21 +188,31 @@
       ) {
         dy = -dy * 0;
         score++;
-        alert("GOAAAAAAL!");
-        document.location.reload();
+        drawGameStatus('GOAAAAAAL!');
+        paused = true;
+        showPlayButton();
       }
     }
 
     function drawScore() {
       ctx.font = "15px Arial";
       ctx.fillStyle = "#FFFFFF";
+      ctx.textAlign = "left";
       ctx.fillText(`Score: ${score}`, 8, 22);
     }
 
     function drawLives() {
       ctx.font = "15px Arial";
       ctx.fillStyle = "#FFFFFF";
+      ctx.textAlign = "left";
       ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 22);
+    }
+
+    function drawGameStatus(msg) {
+      ctx.font = "32px Arial";
+      ctx.fillStyle = "#78CDD7";
+      ctx.textAlign = "center";
+      ctx.fillText(msg, canvas.width / 2, 400);
     }
 
     function drawGoal() {
@@ -208,8 +225,6 @@
       ball.src = "images/ball.png";
       ctx.drawImage(ball, x, y);
     }
-
-
 
     function drawPlayerBlue() {
       playerBlue.src = "images/player-blue.png";
@@ -244,12 +259,14 @@
     function draw() {
       // 'Cleans' canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      paused = false
       drawCones();
       drawGoal();
       drawBall();
       drawPlayerBlue();
       drawScore();
       drawLives();
+   
       collisionDetectionCones();
       collisionDetectionGoal();
       hidePlayButton();
@@ -267,9 +284,14 @@
         else if (y + dy > canvas.height - ballHeight) {
           lives--;
           if (!lives) {
-            alert("GAME OVER");
-            document.location.reload();
+            // alert("GAME OVER");
+           // dy = -dy * 0;
+           drawGameStatus('GAME OVER');
+            paused = true;
+            
             showPlayButton();
+    
+
 
           }
           else {
@@ -298,12 +320,12 @@
       x += dx;
       y += dy;
 
-      requestAnimationFrame(draw);
+      if(!paused) {
+                requestAnimationFrame(draw);
+            }
 
     }
 
-
-    //  draw();
     // Initialize game
     playButton.addEventListener('click', draw);
 
