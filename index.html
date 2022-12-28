@@ -95,11 +95,10 @@
     const coneOffsetTop = 160;
     const coneOffsetLeft = 10;
 
-    // Variables for score, lives, msg, game state
+    // Variables for score, lives
     let score = 0;
     let lives = 3;
-    let msg = '';
-    let paused = true;
+
 
     // Variables for ball, goal, playerBlue
     let ball = new Image();
@@ -174,7 +173,6 @@
               dy = -dy;
               coneItems.status = 0;
               score++;
-
             }
           }
         }
@@ -188,10 +186,8 @@
         dy = 0;
         dx = 0;
         score++;
-        drawGameStatus('GOAAAAAAL!');
-        //showPlayButton();
-        paused = true;
-        reloadThePage();
+        alert("GOAAAAAAL!");
+        document.location.reload();
       }
     }
 
@@ -208,13 +204,6 @@
       ctx.fillStyle = "#FFFFFF";
       ctx.textAlign = "left";
       ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 22);
-    }
-
-    function drawGameStatus(msg) {
-      ctx.font = "900 32px Arial";
-      ctx.fillStyle = "#FF6D7A";
-      ctx.textAlign = "center";
-      ctx.fillText(msg, canvas.width / 2, 400);
     }
 
     function drawGoal() {
@@ -257,15 +246,12 @@
       playButton.style.visibility = 'visible'
     }
 
-    function togglePause() {
-      paused = !paused;
-      draw();
-    }
+
 
     function draw() {
       // 'Cleans' canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       drawCones();
       drawGoal();
       drawBall();
@@ -275,7 +261,6 @@
       collisionDetectionCones();
       collisionDetectionGoal();
       hidePlayButton();
-      paused = false
 
       if (x + dx > canvas.width - ballWidth - fieldOffset || x < fieldOffset) {
         dx = -dx;
@@ -283,17 +268,14 @@
       if (y + dy < ballHeight / 2 + fieldOffset) {
         dy = -dy;
       } else if (y + dy > canvas.height - playerBlueHeight - ballHeight) {
-        if (x > playerBlueX && x < playerBlueX + playerBlueWidth) {
+        if (x > playerBlueX  && x < playerBlueX + playerBlueWidth ) {
           dy = -dy;
         }
-        else if ((y + dy > canvas.height - ballHeight) && lives > 0) {
+        else if (y + dy > canvas.height - ballHeight / 4) {
           lives--;
           if (!lives) {
-            drawGameStatus('GAME OVER');
-           
-            //showPlayButton();
-            paused = true;
-            reloadThePage();
+            alert("GAME OVER");
+            document.location.reload();
           }
           else {
             x = canvas.width / 2;
@@ -321,17 +303,13 @@
       x += dx;
       y += dy;
 
-    if (!paused) {
-        requestAnimationFrame(draw);
-   }
+      requestAnimationFrame(draw);
 
     }
 
     // Initialize game
-   playButton.addEventListener('click', draw);
-   //playButton.addEventListener('click', togglePause);
+    playButton.addEventListener('click', draw);
 
-   
 
 
   </script>
