@@ -27,13 +27,14 @@
     }
   </style>
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 
 <body>
+  <button id="start-button">Play</button>
   <canvas id="myCanvas" width="300" height="600"></canvas>
 
   <script>
+    const startButton = document.querySelector('#start-button');
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
 
@@ -269,8 +270,9 @@
 
     }
 
-
-    draw();
+// Initialize game
+startButton.addEventListener('click', draw);
+  //  draw();
 
   </script>
 </body>
