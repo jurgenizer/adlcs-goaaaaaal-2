@@ -94,12 +94,6 @@
     let score = 0;
     let lives = 3;
 
-    // Sounds
-    let soundCone = "sounds/blip.wav";
-    let soundPlayer = "sounds/player.wav";
-    let soundGameOver = "sounds/gameover.wav";
-    let soundGoal = "sounds/goal.wav";
-
     // Variables for ball, goal, playerBlue
     let ball = new Image();
     let goal = new Image();
@@ -112,12 +106,6 @@
       for (let r = 0; r < coneRowCount; r++) {
         cones[c][r] = { x: 0, y: 0, status: 1 };
       }
-    }
-
-    // Audio
-    function playAudio(audio) {
-      const soundEffect = new Audio(audio);
-      soundEffect.play();
     }
 
     // Keyboard events
@@ -178,7 +166,6 @@
             ) {
               dy = -dy;
               coneItems.status = 0;
-              playAudio(soundCone);
               score++;
             }
           }
@@ -192,7 +179,6 @@
       ) {
         dy = 0;
         dx = 0;
-        playAudio(soundGoal);
         score++;
         alert("GOAAAAAAL!");
         document.location.reload();
@@ -276,7 +262,6 @@
         dy = -dy;
       } else if (y + dy > canvas.height - playerBlueHeight - ballHeight) {
         if (x > playerBlueX  && x < playerBlueX + playerBlueWidth ) {
-          playAudio(soundPlayer);
           dy = -dy;
         }
         else if (y + dy > canvas.height - ballHeight / 4) {
