@@ -63,7 +63,6 @@
     const playButton = document.querySelector('#play-button');
     const canvas = document.getElementById("myCanvas");
     const ctx = canvas.getContext("2d");
-    //const myTimeout = setTimeout(drawGameStatus, 2000);
 
     const playerBlueHeight = 66;
     const playerBlueWidth = 50;
@@ -186,30 +185,33 @@
       if (
         x > goalX && y < goal.y + goalHeight && x < goalX + goalWidth - ballWidth
       ) {
-        dy = -dy * 0;
+        dy = 0;
+        dx = 0;
         score++;
         drawGameStatus('GOAAAAAAL!');
-        paused = true;
         showPlayButton();
+        paused = true;
+        setTimeout(reloadThePage, 2000);
       }
     }
 
     function drawScore() {
-      ctx.font = "15px Arial";
+      ctx.font = "400 15px Arial";
       ctx.fillStyle = "#FFFFFF";
       ctx.textAlign = "left";
       ctx.fillText(`Score: ${score}`, 8, 22);
     }
 
     function drawLives() {
-      ctx.font = "15px Arial";
+      ctx.font = "400 15px Arial";
+      ctx.fontWeight = "nbold";
       ctx.fillStyle = "#FFFFFF";
       ctx.textAlign = "left";
       ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 22);
     }
 
     function drawGameStatus(msg) {
-      ctx.font = "32px Arial";
+      ctx.font = "900 32px Arial";
       ctx.fillStyle = "#78CDD7";
       ctx.textAlign = "center";
       ctx.fillText(msg, canvas.width / 2, 400);
@@ -247,7 +249,6 @@
       }
     }
 
-
     function hidePlayButton() {
       playButton.style.visibility = 'hidden'
     }
@@ -256,21 +257,24 @@
       playButton.style.visibility = 'visible'
     }
 
+    function togglePause() {
+      paused = !paused;
+      draw();
+    }
+
     function draw() {
       // 'Cleans' canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      paused = false
+      //paused = false
       drawCones();
       drawGoal();
       drawBall();
       drawPlayerBlue();
       drawScore();
       drawLives();
-   
       collisionDetectionCones();
       collisionDetectionGoal();
       hidePlayButton();
-
 
       if (x + dx > canvas.width - ballWidth - fieldOffset || x < fieldOffset) {
         dx = -dx;
@@ -281,24 +285,20 @@
         if (x > playerBlueX && x < playerBlueX + playerBlueWidth) {
           dy = -dy;
         }
-        else if (y + dy > canvas.height - ballHeight) {
+        else if ((y + dy > canvas.height - ballHeight) && lives > 0) {
           lives--;
           if (!lives) {
-            // alert("GAME OVER");
-           // dy = -dy * 0;
-           drawGameStatus('GAME OVER');
-            paused = true;
-            
+            drawGameStatus('GAME OVER');
+           
             showPlayButton();
-    
-
-
+            paused = true;
+            setTimeout(reloadThePage, 2000);
           }
           else {
             x = canvas.width / 2;
             y = canvas.height - fieldOffset - 80; //this 'magic number' to be fixed in future version
-            dx = 4;
-            dy = -4;
+            dx = 5;
+            dy = -5;
             playerBlueX = (canvas.width - playerBlueWidth) / 2;
           }
         }
@@ -320,14 +320,17 @@
       x += dx;
       y += dy;
 
-      if(!paused) {
-                requestAnimationFrame(draw);
-            }
+    if (!paused) {
+        requestAnimationFrame(draw);
+   }
 
     }
 
     // Initialize game
-    playButton.addEventListener('click', draw);
+   //playButton.addEventListener('click', draw);
+   playButton.addEventListener('click', togglePause);
+
+   
 
 
   </script>
