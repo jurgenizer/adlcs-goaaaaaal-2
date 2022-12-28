@@ -189,9 +189,9 @@
         dx = 0;
         score++;
         drawGameStatus('GOAAAAAAL!');
-        showPlayButton();
+        //showPlayButton();
         paused = true;
-        setTimeout(reloadThePage, 2000);
+        setTimeout(reloadThePage, 1200);
       }
     }
 
@@ -212,7 +212,7 @@
 
     function drawGameStatus(msg) {
       ctx.font = "900 32px Arial";
-      ctx.fillStyle = "#78CDD7";
+      ctx.fillStyle = "#FF6D7A";
       ctx.textAlign = "center";
       ctx.fillText(msg, canvas.width / 2, 400);
     }
@@ -265,7 +265,7 @@
     function draw() {
       // 'Cleans' canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      //paused = false
+      paused = false
       drawCones();
       drawGoal();
       drawBall();
@@ -290,9 +290,9 @@
           if (!lives) {
             drawGameStatus('GAME OVER');
            
-            showPlayButton();
+            //showPlayButton();
             paused = true;
-            setTimeout(reloadThePage, 2000);
+            setTimeout(reloadThePage, 1200);
           }
           else {
             x = canvas.width / 2;
