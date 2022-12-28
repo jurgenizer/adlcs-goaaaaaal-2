@@ -25,12 +25,33 @@
       text-align: center;
       color: white;
     }
+
+    button {
+      border-radius: 4px;
+      background-color: #009820;
+      border: 2px solid #FFFFFF;
+      color: #FFFFFF;
+      padding: 8px 8px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      transition-duration: 0.4s;
+    }
+
+    button:hover {
+      background-color: #4CAF50;
+      color: #FFFFFF;
+    }
   </style>
 
 </head>
 
 <body>
-  <button id="play-button">Play</button>
+  <div class="container">
+    <button id="play-button">Play</button>
+  </div>
+
   <canvas id="myCanvas" width="300" height="600"></canvas>
 
   <script>
@@ -212,11 +233,11 @@
     }
 
 
-    function hidePlayButton(){
+    function hidePlayButton() {
       playButton.style.visibility = 'hidden'
     }
 
-    function showPlayButton(){
+    function showPlayButton() {
       playButton.style.visibility = 'visible'
     }
 
