@@ -265,7 +265,7 @@
     function draw() {
       // 'Cleans' canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      paused = false
+      
       drawCones();
       drawGoal();
       drawBall();
@@ -275,6 +275,7 @@
       collisionDetectionCones();
       collisionDetectionGoal();
       hidePlayButton();
+      paused = false
 
       if (x + dx > canvas.width - ballWidth - fieldOffset || x < fieldOffset) {
         dx = -dx;
@@ -327,8 +328,8 @@
     }
 
     // Initialize game
-   //playButton.addEventListener('click', draw);
-   playButton.addEventListener('click', togglePause);
+   playButton.addEventListener('click', draw);
+   //playButton.addEventListener('click', togglePause);
 
    
 
