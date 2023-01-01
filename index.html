@@ -261,7 +261,7 @@
       if (y + dy < ballHeight / 2 + fieldOffset) {
         dy = -dy;
       } else if (y + dy > canvas.height - playerBlueHeight - ballHeight) {
-        if (x > playerBlueX  && x < playerBlueX + playerBlueWidth ) {
+        if (x > playerBlueX && x < playerBlueX + playerBlueWidth) {
           dy = -dy;
         }
         else if (y + dy > canvas.height - ballHeight / 4) {
@@ -299,6 +299,12 @@
       requestAnimationFrame(draw);
 
     }
+    // Initialize image assets
+    drawCones();
+    drawGoal();
+    drawBall();
+    drawPlayerBlue();
+
 
     // Initialize game
     playButton.addEventListener('click', draw);
